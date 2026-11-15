@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "ShopLedger",
+    "slug": "shopledger",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "shopledger",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#0F4C31"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "lk.shopledger.mobile"
+    },
+    "android": {
+      "package": "lk.shopledger.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F4C31"
+      }
+    },
+    "plugins": ["expo-router"]
+  }
+}

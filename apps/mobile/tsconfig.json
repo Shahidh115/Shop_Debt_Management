@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@shopledger/shared": ["../../packages/shared/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
+

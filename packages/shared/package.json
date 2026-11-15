@@ -1,0 +1,21 @@
+{
+  "name": "@shopledger/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./constants": "./constants/tokens.ts",
+    "./types": "./types/index.ts",
+    "./schemas": "./schemas/index.ts",
+    "./utils": "./utils/accounting.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}
+

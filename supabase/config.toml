@@ -1,0 +1,26 @@
+project_id = "shopledger-saas"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/**", "shopledger://**"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = false # Public registration is disabled; accounts are created by Admin / Shop Owner only.
+
+[storage]
+enabled = true
+file_size_limit = "5MiB"
+
