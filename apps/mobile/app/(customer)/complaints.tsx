@@ -70,7 +70,7 @@ export default function CustomerComplaintsScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <ScreenHeader
           subtitle="Frames C08–C11, C16–C19, C24, C33, C34, C37"
           title="Transaction Complaints"

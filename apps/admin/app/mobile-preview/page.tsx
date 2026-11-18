@@ -411,22 +411,22 @@ export default function InteractiveMobilePreviewPage() {
 
       {/* Main Split View: 390x844 Mobile Viewport Frame + Live Ledger Inspector */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-        {/* Left: 390px Mobile Frame */}
+        {/* Left: 360x800 Mobile Viewport Frame */}
         <div className="xl:col-span-5 flex justify-center">
-          <div className="w-[390px] min-h-[780px] rounded-[36px] border-[8px] border-[#16241D] bg-[#F4F8F6] shadow-elevated flex flex-col justify-between overflow-hidden">
+          <div className="w-[360px] h-[800px] rounded-[34px] border-[7px] border-[#16241D] bg-[#F4F8F6] shadow-elevated flex flex-col justify-between overflow-hidden">
             {/* Status Bar */}
-            <div className="h-8 px-6 bg-[#0F4C31] text-white text-[11px] font-medium flex items-center justify-between">
+            <div className="h-7 shrink-0 px-5 bg-[#0F4C31] text-white text-[11px] font-medium flex items-center justify-between">
               <span>9:41</span>
-              <span>ShopLedger Mobile · 390×844</span>
+              <span>ShopLedger Mobile · 360×800</span>
               <span>5G · 100%</span>
             </div>
 
             {/* ================= SHOP OWNER MOBILE EXPERIENCE (O01–O53) ================= */}
             {mode === 'owner' && (
               <>
-                <div className="flex-1 p-4 overflow-y-auto space-y-4">
+                <div className="flex-1 min-h-0 p-3.5 overflow-y-auto no-scrollbar space-y-3">
                   {/* Top App Bar */}
-                  <div className="p-3.5 rounded-[14px] bg-[#0F4C31] text-white flex items-center justify-between">
+                  <div className="p-3 rounded-[12px] bg-[#0F4C31] text-white flex items-center justify-between">
                     <div>
                       <div className="text-[11px] text-[#68B692] font-medium">
                         {ownerShop.shop_code} · {ownerShop.status.toUpperCase()}
@@ -484,7 +484,7 @@ export default function InteractiveMobilePreviewPage() {
                             className="w-full h-9 pl-8 pr-3 rounded-[8px] bg-white border border-[#DCE7E1] text-[12px] text-[#16241D] focus:outline-none focus:border-[#1B7A4E]"
                           />
                         </div>
-                        <div className="max-h-32 overflow-y-auto space-y-1 pr-0.5">
+                        <div className="max-h-32 overflow-y-auto no-scrollbar space-y-1 pr-0.5">
                           {filteredOwnerCustomers.map((link) => {
                             const prof = state.profiles.find((p) => p.id === link.customer_id);
                             const bal = getCustomerBalance(ownerId, ownerShopId, link.customer_id);
@@ -1064,87 +1064,81 @@ export default function InteractiveMobilePreviewPage() {
                   {!ownerFlow && ownerTab === 'home' && (
                     <>
                       {/* Hero Total Receivable Card (O02) */}
-                      <div className="p-4 rounded-[14px] bg-white border border-[#DCE7E1] shadow-card">
-                        <div className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#5C6F65]">
+                      <div className="p-3.5 rounded-[12px] bg-white border border-[#DCE7E1] shadow-card">
+                        <div className="text-[10px] font-medium uppercase tracking-[0.06em] text-[#5C6F65]">
                           Frame O02 · Total Shop Credit Receivable
                         </div>
-                        <div className="text-[26px] font-semibold text-[#16241D] tabular-nums mt-1">
+                        <div className="text-[24px] font-semibold text-[#16241D] tabular-nums mt-1">
                           {formatLKR(shopTotalSummary.outstanding_balance)}
-                          <span className="text-[12px] font-normal text-[#5C6F65] ml-1.5">
+                          <span className="text-[11px] font-normal text-[#5C6F65] ml-1.5">
                             (All {ownerCustomerLinks.length} Customers)
                           </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[#DCE7E1] text-[12px]">
-                          <div>
-                            <div className="text-[#5C6F65]">Total Debits (All Customers)</div>
-                            <div className="font-semibold text-[#D97736] tabular-nums">
-                              +{formatLKR(shopTotalSummary.total_debits)}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-[#5C6F65]">Total Credits (All Customers)</div>
-                            <div className="font-semibold text-[#388E5A] tabular-nums">
-                              -{formatLKR(shopTotalSummary.total_credits)}
-                            </div>
-                          </div>
                         </div>
                       </div>
 
                       {/* Quick Actions */}
-                      <div className="grid grid-cols-2 gap-2.5">
+                      <div className="grid grid-cols-2 gap-2">
                         <button
                           type="button"
                           onClick={() => setOwnerFlow('quick_purchase')}
-                          className="p-3 rounded-[12px] bg-[#1B7A4E] text-white text-left"
+                          className="p-2.5 rounded-[10px] bg-[#1B7A4E] text-white text-left flex items-center gap-2"
                         >
-                          <Plus className="w-4 h-4 mb-1" />
-                          <div className="text-[12px] font-semibold">Quick Purchase</div>
-                          <div className="text-[10px] text-[#D1ECE0]">Frame O07</div>
+                          <Plus className="w-4 h-4 shrink-0" />
+                          <div>
+                            <div className="text-[12px] font-semibold leading-tight">Quick Purchase</div>
+                            <div className="text-[10px] text-[#D1ECE0]">Frame O07</div>
+                          </div>
                         </button>
                         <button
                           type="button"
                           onClick={() => setOwnerFlow('itemized_purchase')}
-                          className="p-3 rounded-[12px] bg-[#0F4C31] text-white text-left"
+                          className="p-2.5 rounded-[10px] bg-[#0F4C31] text-white text-left flex items-center gap-2"
                         >
-                          <Receipt className="w-4 h-4 mb-1" />
-                          <div className="text-[12px] font-semibold">Itemized Bill</div>
-                          <div className="text-[10px] text-[#D1ECE0]">Frame O08</div>
+                          <Receipt className="w-4 h-4 shrink-0" />
+                          <div>
+                            <div className="text-[12px] font-semibold leading-tight">Itemized Bill</div>
+                            <div className="text-[10px] text-[#D1ECE0]">Frame O08</div>
+                          </div>
                         </button>
                         <button
                           type="button"
                           onClick={() => setOwnerFlow('record_payment')}
-                          className="p-3 rounded-[12px] bg-white border border-[#DCE7E1] text-left"
+                          className="p-2.5 rounded-[10px] bg-white border border-[#DCE7E1] text-left flex items-center gap-2"
                         >
-                          <CreditCard className="w-4 h-4 text-[#388E5A] mb-1" />
-                          <div className="text-[12px] font-semibold text-[#16241D]">
-                            Record Payment
+                          <CreditCard className="w-4 h-4 text-[#388E5A] shrink-0" />
+                          <div>
+                            <div className="text-[12px] font-semibold text-[#16241D] leading-tight">
+                              Record Payment
+                            </div>
+                            <div className="text-[10px] text-[#5C6F65]">Frames O11–O13</div>
                           </div>
-                          <div className="text-[10px] text-[#5C6F65]">Frames O11–O13</div>
                         </button>
                         <button
                           type="button"
                           onClick={() => setOwnerFlow('add_customer')}
-                          className="p-3 rounded-[12px] bg-white border border-[#DCE7E1] text-left"
+                          className="p-2.5 rounded-[10px] bg-white border border-[#DCE7E1] text-left flex items-center gap-2"
                         >
-                          <Users className="w-4 h-4 text-[#1B7A4E] mb-1" />
-                          <div className="text-[12px] font-semibold text-[#16241D]">
-                            Invite Customer
+                          <Users className="w-4 h-4 text-[#1B7A4E] shrink-0" />
+                          <div>
+                            <div className="text-[12px] font-semibold text-[#16241D] leading-tight">
+                              Invite Customer
+                            </div>
+                            <div className="text-[10px] text-[#5C6F65]">Frames O04–O05</div>
                           </div>
-                          <div className="text-[10px] text-[#5C6F65]">Frames O04–O05</div>
                         </button>
                       </div>
 
                       {/* Recent Ledger Entries (All Shop Customers) */}
-                      <div className="bg-white rounded-[14px] border border-[#DCE7E1] p-3.5">
-                        <div className="text-[12px] font-semibold text-[#16241D] mb-2">
+                      <div className="bg-white rounded-[12px] border border-[#DCE7E1] p-3">
+                        <div className="text-[11px] font-semibold text-[#16241D] mb-1.5">
                           Recent Shop Ledger Activity (All Customers)
                         </div>
-                        <div className="divide-y divide-[#DCE7E1] text-[12px]">
+                        <div className="divide-y divide-[#DCE7E1] text-[11px]">
                           {state.ledgerEntries
                             .filter((entry) => entry.shop_id === ownerShopId)
                             .slice()
                             .reverse()
-                            .slice(0, 6)
+                            .slice(0, 3)
                             .map((entry) => {
                               const isDebit = Number(entry.debit_amount) > 0;
                               const custProf = state.profiles.find(
@@ -1385,7 +1379,7 @@ export default function InteractiveMobilePreviewPage() {
                 </div>
 
                 {/* 5-Tab Bottom Navigation Bar (Owner) */}
-                <div className="h-16 bg-white border-t border-[#DCE7E1] grid grid-cols-5 text-[10px] font-medium">
+                <div className="h-14 shrink-0 bg-white border-t border-[#DCE7E1] grid grid-cols-5 text-[10px] font-medium">
                   {(
                     [
                       { id: 'home', label: 'Home', icon: Home },
@@ -1421,9 +1415,9 @@ export default function InteractiveMobilePreviewPage() {
             {/* ================= CUSTOMER MOBILE EXPERIENCE (C01–C39) ================= */}
             {mode === 'customer' && (
               <>
-                <div className="flex-1 p-4 overflow-y-auto space-y-4">
+                <div className="flex-1 min-h-0 p-3.5 overflow-y-auto no-scrollbar space-y-3">
                   {/* Customer Header + Multi-Shop Switcher (C02 & C03) */}
-                  <div className="p-3.5 rounded-[14px] bg-[#0F4C31] text-white space-y-2.5">
+                  <div className="p-3 rounded-[12px] bg-[#0F4C31] text-white space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-[11px] text-[#68B692]">
@@ -1503,7 +1497,7 @@ export default function InteractiveMobilePreviewPage() {
                             className="w-full h-8 pl-8 pr-3 rounded-[8px] bg-white border border-[#DCE7E1] text-[11px] focus:outline-none focus:border-[#1B7A4E]"
                           />
                         </div>
-                        <div className="max-h-40 overflow-y-auto space-y-1.5">
+                        <div className="max-h-40 overflow-y-auto no-scrollbar space-y-1.5">
                           {filteredDisputableTransactions.map((tx) => {
                             const isSel = selectedDisputedTransaction?.id === tx.id;
                             const isPurchase = tx.transaction_type === 'purchase';
@@ -1828,7 +1822,7 @@ export default function InteractiveMobilePreviewPage() {
                 </div>
 
                 {/* 4-Tab Bottom Navigation Bar (Customer) */}
-                <div className="h-16 bg-white border-t border-[#DCE7E1] grid grid-cols-4 text-[10px] font-medium">
+                <div className="h-14 shrink-0 bg-white border-t border-[#DCE7E1] grid grid-cols-4 text-[10px] font-medium">
                   {(
                     [
                       { id: 'home', label: 'Home', icon: Home },

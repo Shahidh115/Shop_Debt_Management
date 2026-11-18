@@ -107,7 +107,7 @@ export default function OwnerTransactionsScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <ScreenHeader
           subtitle={`Frames O07–O15, O28, O37–O44, O46, O51 · ${balance.customer_name}`}
           title="Transactions & Statements"
@@ -120,7 +120,35 @@ export default function OwnerTransactionsScreen() {
           </View>
         ) : null}
 
-        {/* Search & Select Customer Box */}
+        {/* Mode Switcher */}
+        <View style={styles.toolbar}>
+          <TouchableOpacity
+            onPress={() => setMode('ledger')}
+            style={[styles.toolBtn, mode === 'ledger' && styles.toolBtnActive]}
+          >
+            <Text style={styles.toolBtnText}>Statement</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setMode('quick_purchase')}
+            style={[styles.toolBtn, mode === 'quick_purchase' && styles.toolBtnActive]}
+          >
+            <Text style={styles.toolBtnText}>+ Purchase</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setMode('itemized_purchase')}
+            style={[styles.toolBtn, mode === 'itemized_purchase' && styles.toolBtnActive]}
+          >
+            <Text style={styles.toolBtnText}>+ Itemized</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setMode('record_payment')}
+            style={[styles.toolBtn, mode === 'record_payment' && styles.toolBtnActive]}
+          >
+            <Text style={styles.toolBtnText}>+ Payment</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Compact Search & Select Customer Box */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>1. Search & Select Customer</Text>
           <TextInput
@@ -129,63 +157,42 @@ export default function OwnerTransactionsScreen() {
             placeholder="Search customer by name, email, or phone..."
             style={styles.input}
           />
-          {filteredCustomers.map((sc) => {
-            const p = state.profiles.find((prof) => prof.id === sc.customer_id);
-            const cBal = engine.getCustomerBalance(currentUserId, activeShopId, sc.customer_id);
-            const isSelected = sc.customer_id === selectedCustomerId;
-            return (
-              <TouchableOpacity
-                key={sc.id}
-                onPress={() => setSelectedCustomerId(sc.customer_id)}
-                style={[
-                  styles.customerSelectRow,
-                  isSelected && styles.customerSelectRowActive,
-                ]}
-              >
-                <View>
-                  <Text
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 2 }}>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {filteredCustomers.map((sc) => {
+                const p = state.profiles.find((prof) => prof.id === sc.customer_id);
+                const cBal = engine.getCustomerBalance(currentUserId, activeShopId, sc.customer_id);
+                const isSelected = sc.customer_id === selectedCustomerId;
+                return (
+                  <TouchableOpacity
+                    key={sc.id}
+                    onPress={() => setSelectedCustomerId(sc.customer_id)}
                     style={[
-                      styles.customerSelectName,
-                      isSelected && { color: COLORS.deepForestOlive },
+                      styles.customerChip,
+                      isSelected && styles.customerChipActive,
                     ]}
                   >
-                    {p?.full_name}
-                  </Text>
-                  <Text style={styles.ledgerMeta}>{p?.email}</Text>
-                </View>
-                <Text
-                  style={[
-                    styles.customerSelectBal,
-                    isSelected && { color: COLORS.primaryOlive },
-                  ]}
-                >
-                  {formatLKR(cBal.outstanding_balance)}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {/* Mode Switcher */}
-        <View style={styles.toolbar}>
-          <TouchableOpacity
-            onPress={() => setMode('quick_purchase')}
-            style={styles.toolBtn}
-          >
-            <Text style={styles.toolBtnText}>+ Quick Purchase (O07)</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setMode('itemized_purchase')}
-            style={styles.toolBtn}
-          >
-            <Text style={styles.toolBtnText}>+ Itemized (O08)</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setMode('record_payment')}
-            style={styles.toolBtn}
-          >
-            <Text style={styles.toolBtnText}>+ Payment (O11)</Text>
-          </TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.customerSelectName,
+                        isSelected && { color: COLORS.deepForestOlive },
+                      ]}
+                    >
+                      {p?.full_name}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.ledgerMeta,
+                        isSelected && { color: COLORS.primaryOlive, fontWeight: '700' },
+                      ]}
+                    >
+                      {formatLKR(cBal.outstanding_balance)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
         </View>
 
         {mode === 'quick_purchase' && (
@@ -286,42 +293,44 @@ export default function OwnerTransactionsScreen() {
         )}
 
         {/* Ledger & Statement Table (Frames O14, O15, O46) */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>
-            Account Statement & Running Balance (O14 / O15 / O46)
-          </Text>
-          {statement.entries
-            .slice()
-            .reverse()
-            .map((entry) => {
-              const isDebit = Number(entry.debit_amount) > 0;
-              return (
-                <View key={entry.id} style={styles.ledgerRow}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.ledgerDesc}>{entry.description}</Text>
-                    <Text style={styles.ledgerMeta}>
-                      {entry.reference_code} · {entry.transaction_type}
-                    </Text>
+        {(mode === 'ledger' || mode === 'statement') && (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>
+              Account Statement & Running Balance (O14 / O15 / O46)
+            </Text>
+            {statement.entries
+              .slice()
+              .reverse()
+              .map((entry) => {
+                const isDebit = Number(entry.debit_amount) > 0;
+                return (
+                  <View key={entry.id} style={styles.ledgerRow}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.ledgerDesc}>{entry.description}</Text>
+                      <Text style={styles.ledgerMeta}>
+                        {entry.reference_code} · {entry.transaction_type}
+                      </Text>
+                    </View>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text
+                        style={{
+                          fontWeight: '700',
+                          color: isDebit ? COLORS.debitPurchase : COLORS.creditPayment,
+                        }}
+                      >
+                        {isDebit
+                          ? `+${formatLKR(entry.debit_amount)}`
+                          : `-${formatLKR(entry.credit_amount)}`}
+                      </Text>
+                      <Text style={styles.ledgerMeta}>
+                        Bal: {formatLKR(entry.running_balance)}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={{ alignItems: 'flex-end' }}>
-                    <Text
-                      style={{
-                        fontWeight: '700',
-                        color: isDebit ? COLORS.debitPurchase : COLORS.creditPayment,
-                      }}
-                    >
-                      {isDebit
-                        ? `+${formatLKR(entry.debit_amount)}`
-                        : `-${formatLKR(entry.credit_amount)}`}
-                    </Text>
-                    <Text style={styles.ledgerMeta}>
-                      Bal: {formatLKR(entry.running_balance)}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
-        </View>
+                );
+              })}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -357,6 +366,22 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  toolBtnActive: {
+    backgroundColor: COLORS.primaryOlive,
+  },
+  customerChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.borderNeutral,
+    backgroundColor: COLORS.warmIvory,
+    minWidth: 125,
+  },
+  customerChipActive: {
+    borderColor: COLORS.primaryOlive,
+    backgroundColor: COLORS.softSage,
   },
   toolBtnText: {
     color: '#FFFFFF',

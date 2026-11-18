@@ -55,7 +55,7 @@ export default function OwnerCustomersScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <ScreenHeader
           subtitle="Frames O03–O06, O23, O26, O27, O31, O36, O45"
           title="Shop Customers"

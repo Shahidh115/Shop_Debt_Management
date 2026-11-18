@@ -16,7 +16,7 @@ export default function CustomerHistoryScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <ScreenHeader
           subtitle="Frames C05, C06, C07, C12, C25, C30, C35, C36"
           title="Purchases, Payments & Statement"

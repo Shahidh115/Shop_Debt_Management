@@ -28,7 +28,7 @@ export default function OwnerHomeScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <ScreenHeader
           subtitle={`${shop.shop_code} · Shop Owner Dashboard (Frames O02, O22, O52)`}
           title={shop.shop_name}
@@ -40,27 +40,8 @@ export default function OwnerHomeScreen() {
           <Text style={styles.heroLabel}>TOTAL SHOP CREDIT RECEIVABLE (ALL CUSTOMERS)</Text>
           <Text style={styles.heroValue}>{formatLKR(shopTotalSummary.outstanding_balance)}</Text>
           <Text style={styles.heroSub}>
-            Across all {links.length} linked shop customers
+            Across all {links.length} linked shop customers · {openComplaints.length} open disputes
           </Text>
-
-          <View style={styles.metricsRow}>
-            <View style={styles.metricCol}>
-              <Text style={styles.metricCaption}>Total Debits</Text>
-              <Text style={[styles.metricAmount, { color: COLORS.debitPurchase }]}>
-                +{formatLKR(shopTotalSummary.total_debits)}
-              </Text>
-            </View>
-            <View style={styles.metricCol}>
-              <Text style={styles.metricCaption}>Total Credits</Text>
-              <Text style={[styles.metricAmount, { color: COLORS.creditPayment }]}>
-                -{formatLKR(shopTotalSummary.total_credits)}
-              </Text>
-            </View>
-            <View style={styles.metricCol}>
-              <Text style={styles.metricCaption}>Open Disputes</Text>
-              <Text style={styles.metricAmount}>{openComplaints.length}</Text>
-            </View>
-          </View>
         </View>
 
         {/* Quick Actions */}
